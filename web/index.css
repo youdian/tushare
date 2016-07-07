@@ -1,5 +1,0 @@
-function init(e) {
-    console.log('content loaded');
-    
-}
-document.addEventListener('DOMContentLoaded', init);
