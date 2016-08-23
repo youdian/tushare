@@ -12,7 +12,7 @@ def get_stock_list():
     path = get_stock_path()
     df = None    
     if os.path.exists(path):
-        df = pandas.read_csv(path,index_col='code', dtype={'code':np.object})
+        df = pandas.read_csv(path,index_col=0, dtype={'code':np.object})
         df.index = [format_code(code) for code in df.index]
     else:
         df = fetch_stock_list()
