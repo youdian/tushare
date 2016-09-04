@@ -6,6 +6,7 @@ import numpy as np
 def fetch_stock_list():
     df = ts.get_stock_basics()
     if df is not None:
+        df = df.drop([code for code in df.index if df.timeToMarket[code]==0])
         df.to_csv(get_stock_path())
     return df
 def get_stock_list():
