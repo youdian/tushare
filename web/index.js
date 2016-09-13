@@ -61,7 +61,7 @@ function init(e) {
             xAxisIndex: 'all',
             brushLink: 'all',
             outOfBrush: {
-                colorAlpha: 0.1
+                colorAlpha: 1
             }
         },
         grid: [
