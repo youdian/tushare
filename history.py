@@ -6,6 +6,7 @@ import time
 def fetch_history(stock):
     df = ts.get_hist_data(stock)
     if df is not None:
+        add_percent(df)
         file_name = get_file_path(stock)
         df.to_csv(file_name)
         return df
@@ -31,3 +32,35 @@ def fetch_all():
     for code in df.code:
         fetch_history(code)
         time.sleep(0.1)    
+
+def add_percent(df):
+  if df is None:
+    return
+  length = len(df)
+  l_p_high = []
+  l_p_low = []
+  l_p_open = []
+  l_swing = []
+  l_up = []
+  for i in range(length - 1):
+    last_close = df.close[i + 1]
+    p_high = round(100 * (df.high[i] / last_close - 1), 2)
+    p_low = round(100 * (df.low[i] / last_close - 1), 2)
+    p_open = round(100 * (df.open[i] / last_close - 1), 2)
+    swing = round(p_high - p_low, 2)
+    up = round(df.p_change[i] - p_open, 2)
+    l_p_high.append(p_high)
+    l_p_low.append(p_low)
+    l_p_open.append(p_open)
+    l_swing.append(swing)
+    l_up.append(up)
+  l_p_high.append(0)
+  l_p_low.append(0)
+  l_p_open.append(0)
+  l_swing.append(0)
+  l_up.append(0)
+  df['p_high'] = l_p_high
+  df['p_low'] = l_p_low
+  df['p_open'] = l_p_open
+  df['swing'] = l_swing
+  df['up'] = l_up
