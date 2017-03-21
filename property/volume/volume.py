@@ -1,5 +1,5 @@
 '''the volume of a stock on some day'''
-from property.BaseProperty import BaseProperty
+from property.property import BaseProperty
 
 class Volume(BaseProperty):
     '''the volume of a stock in rencent days
