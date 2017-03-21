@@ -2,13 +2,19 @@
 from property.BaseProperty import BaseProperty
 
 class Volume(BaseProperty):
-    '''the volume of a stock in rencent days'''
+    '''the volume of a stock in rencent days
+    config parameters: day integer default 0. ie,
+    config = {"day": 1}
+    '''
+    name = "volume"
+    day = 0
+
+    def init(self, config):
+        self.day = self._config["day"] if self._config is not None else 0
 
     def value(self):
-        day = 0
-        if self._config is not None:
-            day = self._config['day']
-        return self._history[self._name][day]
+        return self._history[self.name][self.day]
 
     def __repr__(self):
-        return self._name + " is " + self.value()
+        return self.name + " of day " + str(self.day) + \
+         " is " + str(self.value())

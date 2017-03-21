@@ -6,22 +6,18 @@ class BaseProperty(metaclass=ABCMeta):
     ''' a base class of all properties. all subclasses must implement value method
     and name property and __repr__ method'''
 
-    def __init__(self, name, history, config):
-        '''name String the name of the prooerty
-        history DataFrame the daily history of a specfic stock
-        '''
-        if name is None or name == "":
-            raise ValueError("the name of a property can't be empty.")
+    def __init__(self, history, config):
+        '''history DataFrame the daily history of a specfic stock'''
         if history is None:
             raise ValueError("history is None.")
-        self._name = name
         self._history = history
         self._config = config
+        self.init(self._config)
 
-    @property
-    def name(self):
-        '''a unique name to identify the property'''
-        return self._name
+    @abstractmethod
+    def init(self, config):
+        '''use config to init variable'''
+        raise NotImplementedError()
 
     @abstractmethod
     def value(self):
