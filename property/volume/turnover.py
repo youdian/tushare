@@ -4,7 +4,6 @@ from property.property import BaseProperty
 class Turnover(BaseProperty):
     '''the turnover of a stock'''
     name = "turnover"
-    day = 0
 
     def init(self, config):
         self.day = config["day"] if config is not None else 0

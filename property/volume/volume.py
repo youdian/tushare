@@ -7,7 +7,6 @@ class Volume(BaseProperty):
     config = {"day": 1}
     '''
     name = "volume"
-    day = 0
 
     def init(self, config):
         self.day = self._config["day"] if self._config is not None else 0
