@@ -10,7 +10,7 @@ class LongTail(BaseProperty):
         self.end = config["end"] if config and "end" in config else self.start + 1
         self.tail = config["tail"] if config and "tail" in config else 0.45
         self.head = config["head"] if config and "head" in config else 0.3
-        self.swing = config["swing"] if config and "swing" in config else 0.02
+        self.swing = config["swing"] if config and "swing" in config else 0.04
     def value(self):
         has = False
         for day in range(self.start, self.end):
