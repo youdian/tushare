@@ -34,7 +34,11 @@ def get_file_path(stock):
 
 def fetch_all():
     df = pandas.read_csv('csv/stocks.csv', dtype={'code': str})
+    count = len(df)
+    i = 0
     for code in df.code:
+        i += 1
+        print('total stocks ', count, ", now fetching ", i)
         fetch_history(code)
 
 def add_percent(df):
