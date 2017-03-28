@@ -27,14 +27,15 @@ function init(e) {
 	}
 	
 	function splitData(rawData) {
-	  var data = JSON.parse(rawData);
-	  var categoryData = data['index'].reverse();
-	  var datas = data['data'].reverse();
+	  var j_data = JSON.parse(rawData);
+	  var categoryData = [];
+	  var datas = j_data['data'];
 	  var values = [];
 	  var volumns = []
 	  for(var i=0;i<datas.length;i++) {
           let data = datas[i];
-          let ordered_data = [data[0], data[2], data[3], data[1]];
+          let ordered_data = [data[1], data[2], data[4], data[3]];
+          categoryData.push(data[0]);
 		  values.push(ordered_data);
 		  volumns.push(datas[i][4]);
 	  }
