@@ -14,7 +14,7 @@ async def test(request):
 
 @app.route("/history/<code>")
 async def history(request, code):
-    his = ts.get_hist_data(code)
+    his = ts.get_k_data(code)
     if his is None:
         return json({"error": "stock not found"}, status=404)
     else:

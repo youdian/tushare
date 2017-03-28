@@ -7,7 +7,7 @@ import tushare as ts
 
 def fetch_history(stock):
     '''从服务器获取股票日行情'''
-    df = ts.get_hist_data(code=stock, pause=0.01)
+    df = ts.get_k_data(code=stock, pause=0.01)
     if df is not None:
         add_percent(df)
         file_name = get_file_path(stock)
