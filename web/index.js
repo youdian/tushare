@@ -3,14 +3,27 @@ function init(e) {
 	button.addEventListener('click', requestData);
 		
 	function requestData() {
+      console.log("start request");
 	  var codeNode = document.getElementById('code');
 	  var code = codeNode.value;
-	  $.ajax({
-	    url: "http://115.159.121.127/stock/?code=" + code + "&cnt=50",
-		success: function(rawData) {
-				fillChart(rawData);
-		}}
-	   )
+      let host = "127.0.0.1";
+      let port = "8000";
+      let url = "http://" + host + ":" + port + "/history/" + code;
+	//   $.ajax({
+	//     url: "http://" + host + ":" + port + "history/" + code,
+	// 	success: function(rawData) {
+	// 			fillChart(rawData);
+	// 	}}
+	//    )
+    axios.get(url)
+        .then(function (response) {
+            console.log(response)
+            fillChart(response.data);
+    })
+    .catch(function (error) {
+            console.log(error);
+  });
+
 	}
 	
 	function splitData(rawData) {
@@ -20,7 +33,9 @@ function init(e) {
 	  var values = [];
 	  var volumns = []
 	  for(var i=0;i<datas.length;i++) {
-		  values.push(datas[i]);
+          let data = datas[i];
+          let ordered_data = [data[0], data[2], data[3], data[1]];
+		  values.push(ordered_data);
 		  volumns.push(datas[i][4]);
 	  }
 	  return {
