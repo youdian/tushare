@@ -62,7 +62,7 @@ def add_percent(df):
         p_open = round(100 * (df.open[i] / last_close - 1), 2)
         p_change = round(100 * (df.close[i] / last_close - 1), 2)
         swing = round(p_high - p_low, 2)
-        up = round(p_change[i] - p_open, 2)
+        up = round(p_change - p_open, 2)
         l_p_high.append(p_high)
         l_p_low.append(p_low)
         l_p_open.append(p_open)
