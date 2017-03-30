@@ -43,8 +43,6 @@ def fetch_all():
     i = 0
     for code in df.code:
         i += 1
-        if i < 900:
-            continue
         print('total stocks ', count, ", now fetching ", i)
         fetch_history(code)
 
