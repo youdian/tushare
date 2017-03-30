@@ -14,7 +14,7 @@ def fetch_history(stock):
         print("sotck ", stock, " fetch error:", str(err))
         pass
     if df is not None:
-        # add_percent(df)
+        add_percent(df)
         file_name = get_file_path(stock)
         df.to_csv(file_name)
         return df
@@ -60,8 +60,9 @@ def add_percent(df):
         p_high = round(100 * (df.high[i] / last_close - 1), 2)
         p_low = round(100 * (df.low[i] / last_close - 1), 2)
         p_open = round(100 * (df.open[i] / last_close - 1), 2)
+        p_change = round(100 * (df.close[i] / last_close - 1), 2)
         swing = round(p_high - p_low, 2)
-        up = round(df.p_change[i] - p_open, 2)
+        up = round(p_change[i] - p_open, 2)
         l_p_high.append(p_high)
         l_p_low.append(p_low)
         l_p_open.append(p_open)
