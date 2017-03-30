@@ -10,7 +10,7 @@ def get():
     codes = stock_list.index
     l= []
     for code in codes:
-        name = stock_list.loc[[code]]
+        name = stock_list.loc[[code]].name[0]
         if st(name):
             continue
         market = history.get_history(code)
@@ -37,5 +37,5 @@ def k_close(kdata):
 def st(name):
     '''not a st stock'''
     st = "st"
-    valid = name.lower().startsWith(st)
+    valid = name.lower().startswith(st)
     return valid
