@@ -1,6 +1,6 @@
 ''' update stock data after the market is closed'''
-import stock
-import history
+from stock import stock
+from stock import history
 stock_list = stock.fetch_stock_list()
 if stock_list is not None:
     print("fetch stock list success")
