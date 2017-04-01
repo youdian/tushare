@@ -75,6 +75,8 @@ function init(e) {
     function fillChart(rawData) {
         var myChart = echarts.init(document.getElementById('chart'));
         var data = splitData(rawData);
+        let red_color = "rgb(236, 0, 5)";
+        let green_color = "rgb(21, 167, 2)";
         myChart.setOption(option = {
             backgroundColor: '#eee',
             animation: false,
@@ -179,8 +181,8 @@ function init(e) {
                     data: data.values,
                     itemStyle: {
                         normal: {
-                            color: "rgb(236, 0, 5)",
-                            color0: "rgb(21, 167, 2)",
+                            color: red_color,
+                            color0: green_color,
                             borderColor: null,
                             borderColor0: null
                         }
@@ -203,6 +205,7 @@ function init(e) {
                     type: 'line',
                     data: calculateMA(5, data),
                     smooth: true,
+                    symbolSize: 0,
                     lineStyle: {
                         normal: { opacity: 0.5 }
                     }
@@ -212,6 +215,7 @@ function init(e) {
                     type: 'line',
                     data: calculateMA(10, data),
                     smooth: true,
+                    symbolSize: 0,
                     lineStyle: {
                         normal: { opacity: 0.5 }
                     }
@@ -221,6 +225,7 @@ function init(e) {
                     type: 'line',
                     data: calculateMA(20, data),
                     smooth: true,
+                    symbolSize: 0,
                     lineStyle: {
                         normal: { opacity: 0.5 }
                     }
@@ -230,6 +235,7 @@ function init(e) {
                     type: 'line',
                     data: calculateMA(30, data),
                     smooth: true,
+                    symbolSize: 0,
                     lineStyle: {
                         normal: { opacity: 0.5 }
                     }
@@ -239,7 +245,19 @@ function init(e) {
                     type: 'bar',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    data: data.volumns
+                    data: data.volumns,
+                    itemStyle: {
+                        normal: {
+                            color: function(params){
+                                let dataIndex = params.dataIndex;
+                                let day_data = data.values[dataIndex];
+                                console.log(day_data);
+                                let day_open = day_data[0];
+                                let day_close = day_data[1];
+                                return day_close >= day_open ? red_color : green_color;
+                            }
+                        }
+                    }
                 }
             ]
         }, true);
