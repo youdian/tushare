@@ -1,6 +1,7 @@
 from sanic import Sanic
 from sanic.response import json
 import tushare as ts
+from policy import hot
 app = Sanic()
 
 @app.middleware('response')
@@ -19,6 +20,14 @@ async def history(request, code):
         return json({"error": "stock not found"}, status=404)
     else:
         return json(his.to_json(orient='split'))
+
+@app.route("/policy/<name>")
+async def policy(request, name):
+    l = hot.get()
+    if l:
+        return json(l)
+    else:
+        return json({})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)

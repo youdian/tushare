@@ -1,279 +1,264 @@
 function init(e) {
-	var button = document.getElementById('submit');
-	button.addEventListener('click', requestData);
-		
-	function requestData() {
-      console.log("start request");
-	  var codeNode = document.getElementById('code');
-	  var code = codeNode.value;
-      let host = "127.0.0.1";
-      let port = "8000";
-      let url = "http://" + host + ":" + port + "/history/" + code;
-	//   $.ajax({
-	//     url: "http://" + host + ":" + port + "history/" + code,
-	// 	success: function(rawData) {
-	// 			fillChart(rawData);
-	// 	}}
-	//    )
-    axios.get(url)
-        .then(function (response) {
-            console.log(response)
-            fillChart(response.data);
+    var list = new Vue({
+        el: '#list',
+        data: {
+            items: [
+                { "code": '000002', "name": "万科A" }
+            ]
+        },
+        methods: {
+            requestPolicy: function (name) {
+                console.log("requst " + name);
+                let host = "127.0.0.1";
+                let port = "8000";
+                let url = "http://" + host + ":" + port + "/policy/" + name;
+                axios.get(url)
+                    .then(function (response) {
+                        console.log(response)
+                        let data = response.data;
+                        this.items = data;
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            show: function(item) {
+                console.log(item);
+                requestData(item.code);
+            }
+        }
     })
-    .catch(function (error) {
-            console.log(error);
-  });
+    var button = document.getElementById('submit');
+    button.addEventListener('click', searchData);
 
-	}
-	
-	function splitData(rawData) {
-	  var j_data = JSON.parse(rawData);
-	  var categoryData = [];
-	  var datas = j_data['data'];
-	  var values = [];
-	  var volumns = []
-	  for(var i=0;i<datas.length;i++) {
-          let data = datas[i];
-          let ordered_data = [data[1], data[2], data[4], data[3]];
-          categoryData.push(data[0]);
-		  values.push(ordered_data);
-		  volumns.push(datas[i][4]);
-	  }
-	  return {
-        categoryData: categoryData,
-        values: values,
-        volumns: volumns
-    };
-	}
-	
-	function fillChart(rawData) {
-		var myChart = echarts.init(document.getElementById('chart'));
-		var data = splitData(rawData);
-		myChart.setOption(option = {
-        backgroundColor: '#eee',
-        animation: false,
-        legend: {
-            bottom: 10,
-            left: 'center',
-            data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'line'
-            }
-        },
-        toolbox: {
-            feature: {
-                dataZoom: {
-                    yAxisIndex: false
-                },
-                brush: {
-                    type: ['lineX', 'clear']
-                }
-            }
-        },
-        brush: {
-            xAxisIndex: 'all',
-            brushLink: 'all',
-            outOfBrush: {
-                colorAlpha: 1
-            }
-        },
-        grid: [
-            {
-                left: '10%',
-                right: '8%',
-                height: '50%'
-            },
-            {
-                left: '10%',
-                right: '8%',
-                top: '63%',
-                height: '16%'
-            }
-        ],
-        xAxis: [
-            {
-                type: 'category',
-                data: data.categoryData,
-                scale: true,
-                boundaryGap : false,
-                axisLine: {onZero: false},
-                splitLine: {show: false},
-                splitNumber: 20,
-                min: 'dataMin',
-                max: 'dataMax'
-            },
-            {
-                type: 'category',
-                gridIndex: 1,
-                data: data.categoryData,
-                scale: true,
-                boundaryGap : false,
-                axisLine: {onZero: false},
-                axisTick: {show: false},
-                splitLine: {show: false},
-                axisLabel: {show: false},
-                splitNumber: 20,
-                min: 'dataMin',
-                max: 'dataMax'
-            }
-        ],
-        yAxis: [
-            {
-                scale: true,
-                splitArea: {
-                    show: true
-                }
-            },
-            {
-                scale: true,
-                gridIndex: 1,
-                splitNumber: 2,
-                axisLabel: {show: false},
-                axisLine: {show: false},
-                axisTick: {show: false},
-                splitLine: {show: false}
-            }
-        ],
-        dataZoom: [
-            {
-                type: 'inside',
-                xAxisIndex: [0, 1],
-                start: 98,
-                end: 100
-            },
-            {
-                show: true,
-                xAxisIndex: [0, 1],
-                type: 'slider',
-                top: '85%',
-                start: 98,
-                end: 100
-            }
-        ],
-        series: [
-            {
-                name: 'Dow-Jones index',
-                type: 'candlestick',
-                data: data.values,
-                itemStyle: {
-                    normal: {
-                        borderColor: null,
-                        borderColor0: null
-                    }
-                },
-                tooltip: {
-                    formatter: function (param) {
-                        var param = param[0];
-                        return [
-                            'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
-                            'Open: ' + param.data[0] + '<br/>',
-                            'Close: ' + param.data[1] + '<br/>',
-                            'Lowest: ' + param.data[2] + '<br/>',
-                            'Highest: ' + param.data[3] + '<br/>'
-                        ].join('');
-                    }
-                }
-            },
-            {
-                name: 'MA5',
-                type: 'line',
-                data: calculateMA(5, data),
-                smooth: true,
-                lineStyle: {
-                    normal: {opacity: 0.5}
-                }
-            },
-            {
-                name: 'MA10',
-                type: 'line',
-                data: calculateMA(10, data),
-                smooth: true,
-                lineStyle: {
-                    normal: {opacity: 0.5}
-                }
-            },
-            {
-                name: 'MA20',
-                type: 'line',
-                data: calculateMA(20, data),
-                smooth: true,
-                lineStyle: {
-                    normal: {opacity: 0.5}
-                }
-            },
-            {
-                name: 'MA30',
-                type: 'line',
-                data: calculateMA(30, data),
-                smooth: true,
-                lineStyle: {
-                    normal: {opacity: 0.5}
-                }
-            },
-            {
-                name: 'Volumn',
-                type: 'bar',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: data.volumns
-            }
-        ]
-    }, true);
-
-    // myChart.on('brushSelected', renderBrushed);
-
-    // function renderBrushed(params) {
-    //     var sum = 0;
-    //     var min = Infinity;
-    //     var max = -Infinity;
-    //     var countBySeries = [];
-    //     var brushComponent = params.brushComponents[0];
-
-    //     var rawIndices = brushComponent.series[0].rawIndices;
-    //     for (var i = 0; i < rawIndices.length; i++) {
-    //         var val = data.values[rawIndices[i]][1];
-    //         sum += val;
-    //         min = Math.min(val, min);
-    //         max = Math.max(val, max);
-    //     }
-
-    //     panel.innerHTML = [
-    //         '<h3>STATISTICS:</h3>',
-    //         'SUM of open: ' + (sum / rawIndices.length).toFixed(4) + '<br>',
-    //         'MIN of open: ' + min.toFixed(4) + '<br>',
-    //         'MAX of open: ' + max.toFixed(4) + '<br>'
-    //     ].join(' ');
-    // }
-
-    myChart.dispatchAction({
-        type: 'brush',
-        areas: [
-            {
-                brushType: 'lineX',
-                coordRange: ['2016-07-06', '2015-09-13'],
-                xAxisIndex: 0
-            }
-        ]
-    });
-	}
-	
-	function calculateMA(dayCount, data) {
-    var result = [];
-    for (var i = 0, len = data.values.length; i < len; i++) {
-        if (i < dayCount) {
-            result.push('-');
-            continue;
-        }
-        var sum = 0;
-        for (var j = 0; j < dayCount; j++) {
-            sum += data.values[i - j][1];
-        }
-        result.push(+(sum / dayCount).toFixed(3));
+    function searchData() {
+        let codeInput = document.getElementById('code');
+        let code = codeInput.value;
+        requestData(code);
     }
-    return result;
-}
+    function requestData(code) {
+        console.log("start request " + code);
+        let host = "127.0.0.1";
+        let port = "8000";
+        let url = "http://" + host + ":" + port + "/history/" + code;
+        axios.get(url)
+            .then(function (response) {
+                console.log(response)
+                fillChart(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    function splitData(rawData) {
+        var j_data = JSON.parse(rawData);
+        var categoryData = [];
+        var datas = j_data['data'];
+        var values = [];
+        var volumns = []
+        for (var i = 0; i < datas.length; i++) {
+            let data = datas[i];
+            let ordered_data = [data[1], data[2], data[4], data[3]];
+            categoryData.push(data[0]);
+            values.push(ordered_data);
+            volumns.push(datas[i][5]);
+        }
+        return {
+            categoryData: categoryData,
+            values: values,
+            volumns: volumns
+        };
+    }
+
+    function fillChart(rawData) {
+        var myChart = echarts.init(document.getElementById('chart'));
+        var data = splitData(rawData);
+        myChart.setOption(option = {
+            backgroundColor: '#eee',
+            animation: false,
+            legend: {
+                bottom: 10,
+                left: 'center',
+                data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: false
+                    },
+                    brush: {
+                        type: ['lineX', 'clear']
+                    }
+                }
+            },
+            grid: [
+                {
+                    left: '10%',
+                    right: '8%',
+                    height: '50%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '63%',
+                    height: '16%'
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    data: data.categoryData,
+                    scale: true,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    splitLine: { show: false },
+                    splitNumber: 20,
+                    min: 'dataMin',
+                    max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 1,
+                    data: data.categoryData,
+                    scale: true,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    splitNumber: 20,
+                    min: 'dataMin',
+                    max: 'dataMax'
+                }
+            ],
+            yAxis: [
+                {
+                    scale: true,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                {
+                    scale: true,
+                    gridIndex: 1,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
+                }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',
+                    xAxisIndex: [0, 1],
+                    start: 80,
+                    end: 100
+                },
+                {
+                    show: true,
+                    xAxisIndex: [0, 1],
+                    type: 'slider',
+                    top: '85%',
+                    start: 80,
+                    end: 100
+                }
+            ],
+            series: [
+                {
+                    name: 'Dow-Jones index',
+                    type: 'candlestick',
+                    data: data.values,
+                    itemStyle: {
+                        normal: {
+                            color: "rgb(236, 0, 5)",
+                            color0: "rgb(21, 167, 2)",
+                            borderColor: null,
+                            borderColor0: null
+                        }
+                    },
+                    tooltip: {
+                        formatter: function (param) {
+                            var param = param[0];
+                            return [
+                                'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
+                                'Open: ' + param.data[0] + '<br/>',
+                                'Close: ' + param.data[1] + '<br/>',
+                                'Lowest: ' + param.data[2] + '<br/>',
+                                'Highest: ' + param.data[3] + '<br/>'
+                            ].join('');
+                        }
+                    }
+                },
+                {
+                    name: 'MA5',
+                    type: 'line',
+                    data: calculateMA(5, data),
+                    smooth: true,
+                    lineStyle: {
+                        normal: { opacity: 0.5 }
+                    }
+                },
+                {
+                    name: 'MA10',
+                    type: 'line',
+                    data: calculateMA(10, data),
+                    smooth: true,
+                    lineStyle: {
+                        normal: { opacity: 0.5 }
+                    }
+                },
+                {
+                    name: 'MA20',
+                    type: 'line',
+                    data: calculateMA(20, data),
+                    smooth: true,
+                    lineStyle: {
+                        normal: { opacity: 0.5 }
+                    }
+                },
+                {
+                    name: 'MA30',
+                    type: 'line',
+                    data: calculateMA(30, data),
+                    smooth: true,
+                    lineStyle: {
+                        normal: { opacity: 0.5 }
+                    }
+                },
+                {
+                    name: 'Volumn',
+                    type: 'bar',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    data: data.volumns
+                }
+            ]
+        }, true);
+    }
+
+    function calculateMA(dayCount, data) {
+        var result = [];
+        for (var i = 0, len = data.values.length; i < len; i++) {
+            if (i < dayCount) {
+                result.push('-');
+                continue;
+            }
+            var sum = 0;
+            for (var j = 0; j < dayCount; j++) {
+                sum += data.values[i - j][1];
+            }
+            result.push(+(sum / dayCount).toFixed(3));
+        }
+        return result;
+    }
 }
 document.addEventListener('DOMContentLoaded', init);

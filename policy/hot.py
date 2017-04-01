@@ -16,7 +16,7 @@ def get():
         market = history.get_history(code)
         if market is not None:
             if time(market) and k_close(market):
-                l.append((code, name))
+                l.append({"code": code, "name": name})
     return l
 
 
