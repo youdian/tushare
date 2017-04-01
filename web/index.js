@@ -337,7 +337,8 @@ function init(e) {
                     value: values[i],
                     itemStyle: {
                         normal: {
-                            color: "blue"
+                            color: "blue",
+                            color0: "blue"
                         }
                     }
                 };
