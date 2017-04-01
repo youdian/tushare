@@ -231,7 +231,7 @@ function init(e) {
                 {
                     name: 'index',
                     type: 'candlestick',
-                    data: data.values,
+                    data: customBarColor(data.values),
                     itemStyle: {
                         normal: {
                             color: red_color,
@@ -317,6 +317,36 @@ function init(e) {
             result.push(+(sum / dayCount).toFixed(3));
         }
         return result;
+    }
+
+    function customBarColor(values) {
+        if (values == false || values.length <=1) {
+            return;
+        }
+        let new_values = [];
+        let len = values.length;
+        let hot_limit = 0.03;
+        new_values.push(values[0]);
+        for (let i = 1; i < len; i++) {
+            let close = values[i][1];
+            let high = values[i][3];
+            let last_close = values[i - 1][1];
+            let hot = close / last_close - 1 >= hot_limit;
+            if (hot) {
+                let d = {
+                    value: values[i],
+                    itemStyle: {
+                        normal: {
+                            color: "blue"
+                        }
+                    }
+                };
+                new_values.push(d);
+            } else {
+                new_values.push(values[i]);
+            }
+        }
+        return new_values;
     }
 }
 document.addEventListener('DOMContentLoaded', init);
