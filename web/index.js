@@ -72,12 +72,19 @@ function init(e) {
         };
     }
 
+    function getDefaultShowCount(array) {
+        let count = array.length;
+        let min = 200;
+        return count - Math.min(count, min);
+    }
+
     function fillChart(rawData) {
         var myChart = echarts.init(document.getElementById('chart'));
         var data = splitData(rawData);
         let red_color = "rgb(236, 0, 5)";
         let green_color = "rgb(21, 167, 2)";
         let def_color = "black";
+        let def_show_count = getDefaultShowCount(data.categoryData);
         myChart.setOption(option = {
             backgroundColor: '#eee',
             animation: false,
@@ -215,7 +222,7 @@ function init(e) {
                 {
                     type: 'inside',
                     xAxisIndex: [0, 1],
-                    start: 80,
+                    startValue: def_show_count,
                     end: 100
                 },
                 {
@@ -223,7 +230,7 @@ function init(e) {
                     xAxisIndex: [0, 1],
                     type: 'slider',
                     top: '85%',
-                    start: 80,
+                    startValue: def_show_count,
                     end: 100
                 }
             ],
