@@ -22,7 +22,7 @@ function init(e) {
                         console.log(error);
                     });
             },
-            show: function(item) {
+            show: function (item) {
                 console.log(item);
                 requestData(item.code);
             }
@@ -77,18 +77,71 @@ function init(e) {
         var data = splitData(rawData);
         let red_color = "rgb(236, 0, 5)";
         let green_color = "rgb(21, 167, 2)";
+        let def_color = "black";
         myChart.setOption(option = {
             backgroundColor: '#eee',
             animation: false,
             legend: {
                 bottom: 10,
                 left: 'center',
-                data: ['Dow-Jones index', 'MA5', 'MA10', 'MA20', 'MA30']
+                data: ['index', 'MA5', 'MA10', 'MA20', 'MA30']
             },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'line'
+                },
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                borderColor: def_color,
+                textStyle: {
+                    color: def_color
+                },
+                formatter: function (params) {
+                    let data_index = params[0].dataIndex;
+                    let last_data_index = data_index - 1;
+                    let open = data.values[data_index][0];
+                    let close = data.values[data_index][1];
+                    let low = data.values[data_index][2];
+                    let high = data.values[data_index][3];
+                    let volume = data.volumns[data_index];
+                    let color_open = def_color;
+                    let color_close = def_color;
+                    let color_low = def_color;
+                    let color_high = def_color;
+                    function color(p) {
+                        if (p > 0) {
+                            return red_color;
+                        } else if (p < 0) {
+                            return green_color;
+                        } else {
+                            return def_color;
+                        }
+                    }
+                    if (last_data_index >= 0) {
+                        let last_close = data.values[last_data_index][1];
+                        if (last_close > 0) {
+                            let p_open = (open / last_close - 1) * 100;
+                            let p_close = (close / last_close - 1) * 100;
+                            let p_low = (low / last_close - 1) * 100;
+                            let p_high = (high / last_close - 1) * 100;
+                            open += "(" + p_open.toFixed(2) + "%)";
+                            close += "(" + p_close.toFixed(2) + "%)";
+                            low += "(" + p_low.toFixed(2) + "%)";
+                            high += "(" + p_high.toFixed(2) + "%)";
+                            color_open = color(p_open);
+                            color_close = color(p_close);
+                            color_low = color(p_low);
+                            color_high = color(p_high);
+                        }
+                    }
+                    return [
+                        'Date: ' + params[0].name + '<hr size=1 style="margin: 3px 0">',
+                        '开盘: <strong style="color:' + color_open + '">' + open + '</strong><br/>',
+                        '收盘: <strong style="color:' + color_close + '">' + close + '</strong><br/>',
+                        '最低: <strong style="color:' + color_low + '">' + low + '</strong><br/>',
+                        '最高: <strong style="color:' + color_high + '">' + high + '</strong><br/>',
+                        '成交量: ' + (volume / 10000).toFixed(2) + '万手<br/>'
+                    ].join('');
                 }
             },
             toolbox: {
@@ -176,7 +229,7 @@ function init(e) {
             ],
             series: [
                 {
-                    name: 'Dow-Jones index',
+                    name: 'index',
                     type: 'candlestick',
                     data: data.values,
                     itemStyle: {
@@ -185,18 +238,6 @@ function init(e) {
                             color0: green_color,
                             borderColor: null,
                             borderColor0: null
-                        }
-                    },
-                    tooltip: {
-                        formatter: function (param) {
-                            var param = param[0];
-                            return [
-                                'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
-                                'Open: ' + param.data[0] + '<br/>',
-                                'Close: ' + param.data[1] + '<br/>',
-                                'Lowest: ' + param.data[2] + '<br/>',
-                                'Highest: ' + param.data[3] + '<br/>'
-                            ].join('');
                         }
                     }
                 },
@@ -248,10 +289,9 @@ function init(e) {
                     data: data.volumns,
                     itemStyle: {
                         normal: {
-                            color: function(params){
+                            color: function (params) {
                                 let dataIndex = params.dataIndex;
                                 let day_data = data.values[dataIndex];
-                                console.log(day_data);
                                 let day_open = day_data[0];
                                 let day_close = day_data[1];
                                 return day_close >= day_open ? red_color : green_color;
