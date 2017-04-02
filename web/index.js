@@ -4,7 +4,8 @@ function init(e) {
         data: {
             items: [
                 { "code": '000002', "name": "万科A" }
-            ]
+            ],
+            selected: 0
         },
         methods: {
             requestPolicy: function (name) {
@@ -22,8 +23,10 @@ function init(e) {
                         console.log(error);
                     });
             },
-            show: function (item) {
+            show: function (item, index) {
                 console.log(item);
+                console.log(index);
+                this.selected = index;
                 requestData(item.code);
             }
         }
