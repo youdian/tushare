@@ -5,7 +5,7 @@ function init(e) {
             items: [
                 { "code": '000002', "name": "万科A" }
             ],
-            selected: -1
+            selected: 0
         },
         methods: {
             requestPolicy: function (name) {
@@ -28,24 +28,12 @@ function init(e) {
                 console.log(index);
                 this.selected = index;
                 requestData(item.code);
-                hiddenInput.focus();
-            },
-            onkey: function (up) {
-                console.log(up);
-                let new_position = up ? this.selected - 1 : this.selected + 1;
-                let length = this.items.length;
-                new_position = Math.max(0, Math.min(new_position, length - 1));
-                if (new_position !== this.selected) {
-                    this.show(this.items[new_position], new_position);
-                }
-
-
             }
         }
     })
     var button = document.getElementById('submit');
     button.addEventListener('click', searchData);
-    let hiddenInput = document.getElementById("hidden_nav");
+
     function searchData() {
         let codeInput = document.getElementById('code');
         let code = codeInput.value;
@@ -342,7 +330,7 @@ function init(e) {
     }
 
     function customBarColor(values) {
-        if (values == false || values.length <= 1) {
+        if (values == false || values.length <=1) {
             return;
         }
         let new_values = [];

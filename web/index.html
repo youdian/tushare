@@ -26,7 +26,6 @@
   <div style="width: 200px;height: 1000px;float: left; position: relative;overflow: auto;">
     <ul id="list">
       <button id="hot" v-on:click="requestPolicy('hot')">Hot</button>
-      <input id = "hidden_nav" style="display: block; width: 0; height: 0; border: none" v-on:keyup.up="onkey(true)" v-on:keyup.down="onkey(false)"></input>
       <li v-for="(item, index) in items" v-on:click="show(item, index)" v-bind:class="[selected == index ? 'active' : '']">
         {{ item.code }} {{ item.name }}
       </li>
