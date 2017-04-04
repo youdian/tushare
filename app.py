@@ -23,7 +23,11 @@ async def history(request, code):
 
 @app.route("/policy/<name>")
 async def policy(request, name):
-    l = hot.get()
+    l = []
+    if name == "hot":
+        l = hot.get()
+    elif name == "new":
+        l = hot.new()
     if l:
         return json(l)
     else:

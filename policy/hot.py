@@ -5,9 +5,9 @@ from datetime import timedelta
 
 day = 10
 min_count = 20
-normal_p_change = 3
-min_p_change = 2.5
-min_p_high = 5
+normal_p_change = 6
+min_p_change = 4
+min_p_high = 8
 last_trading_day = "2017-03-31"
 
 def get():
@@ -24,6 +24,17 @@ def get():
                 l.append({"code": code, "name": name})
     return l
 
+def new():
+    stock_list = stock.get_stock_list()
+    l = []
+    for code in stock_list.index:
+        name = stock_list.loc[[code]].name[0]
+        if st(name):
+            continue
+        kdata = history.get_history(code)
+        if len(kdata) >= 20 and len(kdata) <= 100:
+            l.append({"code": code, "name": name})
+    return l
 
 def time(kdata):
     '''min record count'''

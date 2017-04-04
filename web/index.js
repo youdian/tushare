@@ -4,6 +4,7 @@ function init(e) {
         data: {
             policies: [
                 { "name": "hot", "desc": "最近10天内某天涨幅大于3%" },
+                {"name": "new", "desc": "次新股"},
                 { "name": "still", "desc": "最近几天成交量显著降低" }
             ],
             items: [
