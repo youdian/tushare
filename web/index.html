@@ -23,15 +23,21 @@
     <input id="code" name="code" type="text"></input>
     <input id="submit" type="button" value="确定"></input>
   </form>
-  <div style="width: 200px;height: 1000px;float: left; position: relative;overflow: auto;">
-    <ul id="list">
-      <button id="hot" v-on:click="requestPolicy('hot')">Hot</button>
-      <li v-for="(item, index) in items" v-on:click="show(item, index)" v-bind:class="[selected == index ? 'active' : '']">
-        {{ item.code }} {{ item.name }}
+  <div id="stock">
+    <ul id="policy_list">
+      <li v-for="(policy, index) in policies" v-on:click="requestPolicy(policy, index)" v-bind:class="[selected_policy == index ? 'active' : '']">
+        {{policy.name}}
       </li>
     </ul>
+    <div id="stock_area">
+      <ul id="stock_list">
+        <li v-for="(item, index) in items" v-on:click="show(item, index)" v-bind:class="[selected_stock == index ? 'active' : '']">
+          {{ item.code }} {{ item.name }}
+        </li>
+      </ul>
+      <div id="stock_chart"></div>
+    </div>
   </div>
-  <div id="chart" style="width: 1000px;height:800px; float: left; margin-left: 20px; position: relative;background-color:lightcyan"></div>
 </body>
 
 </html>

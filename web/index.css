@@ -1,3 +1,65 @@
+body {
+    background-color: #f6f6f6;
+}
+
+#stock {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+    height: 800px;
+}
+#policy_list {
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+    flex: 0 0 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: lightskyblue;
+}
+
+#policy_list li {
+    padding: 5px 10px 5px 10px;
+}
+
+#stock_area {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0;
+
+}
+
+#stock_list {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+    overflow: auto;
+    margin: 0;
+    list-style: decimal;
+    padding:0px 10px 0px 40px; 
+    background-color: lightblue;
+}
+
+#stock_list li {
+    padding: 5px 0px 5px 0px;
+}
+
+#stock_chart {
+    flex: 1;
+}
+
+ul li {
+    white-space: nowrap;
+}
 li.active {
     background-color: gray;
 }

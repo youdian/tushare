@@ -1,18 +1,25 @@
 function init(e) {
-    var list = new Vue({
-        el: '#list',
+    var stock = new Vue({
+        el: '#stock',
         data: {
-            items: [
-                { "code": '000002', "name": "万科A" }
+            policies: [
+                { "name": "hot", "desc": "最近10天内某天涨幅大于3%" },
+                { "name": "still", "desc": "最近几天成交量显著降低" }
             ],
-            selected: 0
+            items: [
+                { "code": '000002', "name": "万科A" },
+                {"code": "603833", "name": "欧派家居"}
+            ],
+            selected_stock: -1,
+            selected_policy: -1
         },
         methods: {
-            requestPolicy: function (name) {
-                console.log("requst " + name);
+            requestPolicy: function (policy, index) {
+                console.log("requst " + policy.name);
+                this.selected_policy = index;
                 let host = "127.0.0.1";
                 let port = "8000";
-                let url = "http://" + host + ":" + port + "/policy/" + name;
+                let url = "http://" + host + ":" + port + "/policy/" + policy.name;
                 axios.get(url)
                     .then(function (response) {
                         console.log(response)
@@ -26,7 +33,7 @@ function init(e) {
             show: function (item, index) {
                 console.log(item);
                 console.log(index);
-                this.selected = index;
+                this.selected_stock = index;
                 requestData(item.code);
             }
         }
@@ -82,7 +89,7 @@ function init(e) {
     }
 
     function fillChart(rawData) {
-        var myChart = echarts.init(document.getElementById('chart'));
+        var myChart = echarts.init(document.getElementById('stock_chart'));
         var data = splitData(rawData);
         let red_color = "rgb(236, 0, 5)";
         let green_color = "rgb(21, 167, 2)";
@@ -330,7 +337,7 @@ function init(e) {
     }
 
     function customBarColor(values) {
-        if (values == false || values.length <=1) {
+        if (values == false || values.length <= 1) {
             return;
         }
         let new_values = [];
