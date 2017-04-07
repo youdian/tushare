@@ -57,6 +57,34 @@ body {
     flex: 1;
 }
 
+#stock_realtime {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0 10px 0 10px;
+
+}
+
+#stock_market {
+    flex: 0 0 auto;
+}
+
+#stock_biding {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    margin: 20px 0 0 0;
+    padding: 0;
+    flex: 0 0 auto;
+}
+
+#stock_biding li {
+    list-style: none;
+    padding: 5px 0px 5px 0px;
+}
+
 ul li {
     white-space: nowrap;
 }

@@ -36,6 +36,20 @@
         </li>
       </ul>
       <div id="stock_chart"></div>
+      <div id="stock_realtime">
+        <div id="stock_market">
+          Open:  {{realtime.open}}<br>
+          Now:   {{realtime.now}}<br>
+          High:  {{realtime.high}}<br>
+          Low:   {{realtime.low}}<br>
+        </div>
+        <hr>
+        <ul id="stock_biding">
+          <li v-for="bid in bids">
+            {{bid.name}} {{bid.price}}      {{bid.amount}}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </body>

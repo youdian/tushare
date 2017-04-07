@@ -4,15 +4,33 @@ function init(e) {
         data: {
             policies: [
                 { "name": "hot", "desc": "最近10天内某天涨幅大于3%" },
-                {"name": "new", "desc": "次新股"},
+                { "name": "new", "desc": "次新股" },
                 { "name": "still", "desc": "最近几天成交量显著降低" }
             ],
             items: [
                 { "code": '000002', "name": "万科A" },
-                {"code": "603833", "name": "欧派家居"}
+                { "code": "603833", "name": "欧派家居" }
             ],
             selected_stock: -1,
-            selected_policy: -1
+            selected_policy: -1,
+            realtime: {
+                "open": 12,
+                "now": 13,
+                "high": 15,
+                "low": 10
+            },
+            bids: [
+                { "name": "S5", "value": 100 },
+                { "name": "S4", "value": 100 },
+                { "name": "S3", "value": 100 },
+                { "name": "S2", "value": 100 },
+                { "name": "S1", "value": 100 },
+                { "name": "B1", "value": 100 },
+                { "name": "B2", "value": 100 },
+                { "name": "B3", "value": 100 },
+                { "name": "B4", "value": 100 },
+                { "name": "B5", "value": 100 }
+            ]
         },
         methods: {
             requestPolicy: function (policy, index) {
@@ -39,6 +57,7 @@ function init(e) {
             }
         }
     })
+    let intervalId = 0;
     var button = document.getElementById('submit');
     button.addEventListener('click', searchData);
 
@@ -48,6 +67,9 @@ function init(e) {
         requestData(code);
     }
     function requestData(code) {
+        if (intervalId !== 0) {
+            clearInterval(intervalId);
+        }
         console.log("start request " + code);
         let host = "127.0.0.1";
         let port = "8000";
@@ -55,12 +77,70 @@ function init(e) {
         axios.get(url)
             .then(function (response) {
                 console.log(response)
-                fillChart(response.data);
+                var data = splitData(response.data);
+                fillChart(data);
+                intervalId = setInterval(function () {
+                    requestRealtimeData(data, code);
+                }, 3000);
             })
             .catch(function (error) {
                 console.log(error);
             });
 
+    }
+
+    function requestRealtimeData(historyData, code) {
+        // setInterval
+        let host = "127.0.0.1";
+        let port = "8000";
+        let url = "http://" + host + ":" + port + "/realtime/" + code;
+        axios.get(url)
+            .then(function (response) {
+                console.log(response)
+                let data = JSON.parse(response.data);
+                let realtime = {
+                    "open": data.open["0"],
+                    "now": data.price["0"],
+                    "high": data.high["0"],
+                    "low": data.low["0"]
+                }
+                let bids = [
+                    { "name": "S5", "price": data.a5_p["0"], "amount": data.a5_v["0"] },
+                    { "name": "S4", "price": data.a4_p["0"], "amount": data.a4_v["0"] },
+                    { "name": "S3", "price": data.a3_p["0"], "amount": data.a3_v["0"] },
+                    { "name": "S2", "price": data.a2_p["0"], "amount": data.a2_v["0"] },
+                    { "name": "S1", "price": data.a1_p["0"], "amount": data.a1_v["0"] },
+                    { "name": "B1", "price": data.b1_p["0"], "amount": data.b1_v["0"] },
+                    { "name": "B2", "price": data.b2_p["0"], "amount": data.b2_v["0"] },
+                    { "name": "B3", "price": data.b3_p["0"], "amount": data.b3_v["0"] },
+                    { "name": "B4", "price": data.b4_p["0"], "amount": data.b4_v["0"] },
+                    { "name": "B5", "price": data.b5_p["0"], "amount": data.b5_v["0"] }
+                ]
+                stock.realtime = realtime;
+                stock.bids = bids;
+                updateKLine(historyData, data)
+            })
+            .catch(function (error) {
+
+            });
+    }
+
+    function updateKLine(historyData, updateData) {
+        let categoryData = historyData.categoryData;
+        let count = categoryData.length
+        let last_date = categoryData[count - 1];
+        let update_date = updateData.date["0"];
+        let value = [updateData.open["0"], updateData.price["0"], updateData.low["0"], updateData.high["0"]];
+        let volume = updateData.volume["0"];
+        if (last_date === update_date) {
+            historyData.values[count - 1] = value;
+            historyData.volumns[count - 1] = volume;
+        } else {
+            historyData.categoryData.push(update_date);
+            historyData.values.push(value);
+            historyData.volumns.push(volume);
+        }
+        fillChart
     }
 
     function splitData(rawData) {
@@ -89,9 +169,8 @@ function init(e) {
         return count - Math.min(count, min);
     }
 
-    function fillChart(rawData) {
+    function fillChart(data) {
         var myChart = echarts.init(document.getElementById('stock_chart'));
-        var data = splitData(rawData);
         let red_color = "rgb(236, 0, 5)";
         let green_color = "rgb(21, 167, 2)";
         let def_color = "black";

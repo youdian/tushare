@@ -33,5 +33,13 @@ async def policy(request, name):
     else:
         return json({})
 
+@app.route("/realtime/<code>")
+async def realtime(request, code):
+    real = ts.get_realtime_quotes(code)
+    if real is None:
+        return json({"error": "no realtime data"}, status=500)
+    else:
+        return json(real.to_json())
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
