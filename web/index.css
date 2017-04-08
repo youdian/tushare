@@ -60,9 +60,8 @@ body {
 #stock_realtime {
     display: flex;
     flex-flow: column nowrap;
-    align-items: flex-start;
-    flex: 0 0 auto;
-    margin: 0;
+    flex: 0 0 150px;
+    margin-top: 10;
     padding: 0 10px 0 10px;
 
 }
@@ -75,7 +74,7 @@ body {
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
-    margin: 20px 0 0 0;
+    margin: 0;
     padding: 0;
     flex: 0 0 auto;
 }
@@ -83,6 +82,11 @@ body {
 #stock_biding li {
     list-style: none;
     padding: 5px 0px 5px 0px;
+}
+
+#stock_realtime hr {
+    flex: 0 0 1px;
+    margin: 10px 0 10px 0;
 }
 
 ul li {

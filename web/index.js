@@ -20,16 +20,6 @@ function init(e) {
                 "low": 10
             },
             bids: [
-                { "name": "S5", "value": 100 },
-                { "name": "S4", "value": 100 },
-                { "name": "S3", "value": 100 },
-                { "name": "S2", "value": 100 },
-                { "name": "S1", "value": 100 },
-                { "name": "B1", "value": 100 },
-                { "name": "B2", "value": 100 },
-                { "name": "B3", "value": 100 },
-                { "name": "B4", "value": 100 },
-                { "name": "B5", "value": 100 }
             ]
         },
         methods: {
@@ -105,16 +95,16 @@ function init(e) {
                     "low": data.low["0"]
                 }
                 let bids = [
-                    { "name": "S5", "price": data.a5_p["0"], "amount": data.a5_v["0"] },
-                    { "name": "S4", "price": data.a4_p["0"], "amount": data.a4_v["0"] },
-                    { "name": "S3", "price": data.a3_p["0"], "amount": data.a3_v["0"] },
-                    { "name": "S2", "price": data.a2_p["0"], "amount": data.a2_v["0"] },
-                    { "name": "S1", "price": data.a1_p["0"], "amount": data.a1_v["0"] },
-                    { "name": "B1", "price": data.b1_p["0"], "amount": data.b1_v["0"] },
-                    { "name": "B2", "price": data.b2_p["0"], "amount": data.b2_v["0"] },
-                    { "name": "B3", "price": data.b3_p["0"], "amount": data.b3_v["0"] },
-                    { "name": "B4", "price": data.b4_p["0"], "amount": data.b4_v["0"] },
-                    { "name": "B5", "price": data.b5_p["0"], "amount": data.b5_v["0"] }
+                    { "name": "卖5", "price": data.a5_p["0"], "amount": data.a5_v["0"] },
+                    { "name": "卖4", "price": data.a4_p["0"], "amount": data.a4_v["0"] },
+                    { "name": "卖3", "price": data.a3_p["0"], "amount": data.a3_v["0"] },
+                    { "name": "卖2", "price": data.a2_p["0"], "amount": data.a2_v["0"] },
+                    { "name": "卖1", "price": data.a1_p["0"], "amount": data.a1_v["0"] },
+                    { "name": "买1", "price": data.b1_p["0"], "amount": data.b1_v["0"] },
+                    { "name": "买2", "price": data.b2_p["0"], "amount": data.b2_v["0"] },
+                    { "name": "买3", "price": data.b3_p["0"], "amount": data.b3_v["0"] },
+                    { "name": "买4", "price": data.b4_p["0"], "amount": data.b4_v["0"] },
+                    { "name": "买5", "price": data.b5_p["0"], "amount": data.b5_v["0"] }
                 ]
                 stock.realtime = realtime;
                 stock.bids = bids;
