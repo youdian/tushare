@@ -13,14 +13,8 @@ function init(e) {
             ],
             selected_stock: -1,
             selected_policy: -1,
-            realtime: {
-                "open": 12,
-                "now": 13,
-                "high": 15,
-                "low": 10
-            },
-            bids: [
-            ]
+            realtime: [],
+            bids: []
         },
         methods: {
             requestPolicy: function (policy, index) {
@@ -88,12 +82,12 @@ function init(e) {
             .then(function (response) {
                 console.log(response)
                 let data = JSON.parse(response.data);
-                let realtime = {
-                    "open": data.open["0"],
-                    "now": data.price["0"],
-                    "high": data.high["0"],
-                    "low": data.low["0"]
-                }
+                let realtime= [
+                    {"name": "now", "value": data.price["0"]},
+                    {"name": "open", "value": data.open["0"]},
+                    {"name": "high", "value": data.high["0"]},
+                    {"name": "low", "value": data.low["0"]},
+                ];
                 let bids = [
                     { "name": "卖5", "price": data.a5_p["0"], "amount": data.a5_v["0"] },
                     { "name": "卖4", "price": data.a4_p["0"], "amount": data.a4_v["0"] },
@@ -105,7 +99,7 @@ function init(e) {
                     { "name": "买3", "price": data.b3_p["0"], "amount": data.b3_v["0"] },
                     { "name": "买4", "price": data.b4_p["0"], "amount": data.b4_v["0"] },
                     { "name": "买5", "price": data.b5_p["0"], "amount": data.b5_v["0"] }
-                ]
+                ];
                 stock.realtime = realtime;
                 stock.bids = bids;
                 updateKLine(historyData, data)

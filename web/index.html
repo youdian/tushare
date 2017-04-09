@@ -9,8 +9,8 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="full-screen" content="yes">
   <meta name="x5-fullscreen" content="true">
-  <title>量化策略</title>
-  <link rel="Stylesheet" type="text/css" href="index.css" />
+  <title>Quant</title>
+  <!--<link rel="Stylesheet" type="text/css" href="index.css" />-->
   <script type="text/javascript" src="jquery-3.1.0.js"></script>
   <script type="text/javascript" src="echarts.min.js"></script>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -32,29 +32,36 @@
 <body>
   <form>
     <input id="code" name="code" type="text"></input>
-    <input id="submit" type="button" value="确定"></input>
+    <input id="submit" type="button" value="确定" class="button button-default"></input>
   </form>
-  <div id="stock">
-    <ul id="policy_list">
-      <li v-for="(policy, index) in policies" v-on:click="requestPolicy(policy, index)" v-bind:class="[selected_policy == index ? 'active' : '']">
-        {{policy.name}}
-      </li>
-    </ul>
-    <div id="stock_area">
-      <ul id="stock_list">
-        <li v-for="(item, index) in items" v-on:click="show(item, index)" v-bind:class="[selected_stock == index ? 'active' : '']">
-          {{ item.code }} {{ item.name }}
+  <div id="stock" class="container-fluid" style="height:600px">
+    <div class="container-fluid">
+      <ul id="policy_list" class="list-inline list-group" style="height:20%;">
+        <li class="list-group-item" v-for="(policy, index) in policies" v-on:click="requestPolicy(policy, index)" v-bind:class="[selected_policy == index ? 'active' : '']">
+          {{policy.name}}
         </li>
       </ul>
-      <div id="stock_chart"></div>
-      <div id="stock_realtime">
-        <div id="stock_market">
-          Open: {{realtime.open}}<br> Now: {{realtime.now}}<br> High: {{realtime.high}}<br> Low: {{realtime.low}}<br>
-        </div>
+    </div>
+    <div id="stock_area" class="row" style="height:80%;">
+      <ol id="stock_list" class="col-md-2 list-group" style="overflow:auto; height: 100%;">
+        <li class="list-group-item" v-for="(item, index) in items" v-on:click="show(item, index)" v-bind:class="[selected_stock == index ? 'active' : '']">
+          {{ item.code }} {{ item.name }}
+        </li>
+      </ol>
+      <div id="stock_chart" class="col-md-8" style="height:100%"></div>
+      <div id="stock_realtime" class="col-md-2">
+        <ul id="stock_market" class="container-fluid list-unstyled">
+          <li v-for="item in realtime" class="row">
+            <span class="col-md-4 text-left">{{item.name}}</span>
+            <span class="col-md-8 text-left">{{item.value}}</span>
+          </li>
+        </ul>
         <hr>
-        <ul id="stock_biding">
-          <li v-for="bid in bids">
-            {{bid.name}} {{bid.price}} {{bid.amount}}
+        <ul id="stock_biding" class="container-fluid list-unstyled">
+          <li v-for="bid in bids" class="row">
+            <span class="col-md-4 text-left">{{bid.name}}</span> 
+            <span class="col-md-4 text-left">{{bid.price}}</span>
+            <span class="col-md-4 text-right">{{bid.amount}}</span>
           </li>
         </ul>
       </div>
