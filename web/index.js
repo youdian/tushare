@@ -105,7 +105,7 @@ function init(e) {
                 updateKLine(historyData, data)
             })
             .catch(function (error) {
-
+                console.log(error);
             });
     }
 
@@ -115,7 +115,7 @@ function init(e) {
         let last_date = categoryData[count - 1];
         let update_date = updateData.date["0"];
         let value = [updateData.open["0"], updateData.price["0"], updateData.low["0"], updateData.high["0"]];
-        let volume = updateData.volume["0"];
+        let volume = updateData.volume["0"] / 100;
         if (last_date === update_date) {
             historyData.values[count - 1] = value;
             historyData.volumns[count - 1] = volume;
@@ -124,7 +124,7 @@ function init(e) {
             historyData.values.push(value);
             historyData.volumns.push(volume);
         }
-        fillChart
+        fillChart(historyData);
     }
 
     function splitData(rawData) {
